@@ -1,0 +1,44 @@
+
+  "Animals": [
+    {
+      "Name": "Stinky",
+      "Type": {
+        "Category": "Kitty",
+        "Breed": "Oxford Whipshire"
+      },
+      "Sex": "Alternate Tuesdays",
+      "FurColor": "Skin",
+      "Age": "Never ask a lady"
+    },
+    {
+      "Name": "Stain",
+      "Type": {
+        "Category": "Jaguar",
+        "Breed": "Road Island Blue"
+      },
+      "Sex": "Intersex",
+      "FurColor": "Spotted White and Blue",
+      "Age": "8"
+    },
+    {
+      "Name": "Jason",
+      "Type": {
+        "Category": "Dog",
+        "Breed": "Retriever (Golden)"
+      },
+      "Sex": "Male",
+      "FurColor": "Golden",
+      "Age": "17"
+    },
+    {
+      "Name": "Vivzi",
+      "Type": {
+        "Category": "Human",
+        "Breed": "Latina"
+      },
+      "Sex": "Female",
+      "FurColor": "Blonde",
+      "Age": "20something"
+    }
+  ]
+}

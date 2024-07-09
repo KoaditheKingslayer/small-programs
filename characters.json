@@ -1,0 +1,25 @@
+{
+  "Rick": {
+    "Name": "Rick",
+    "Player": "Koadi",
+    "Stats": {
+      "Mental": 2,
+      "Social": 3,
+      "Physical": 7,
+      "Spirit": 3,
+      "Hearthfire": 3,
+      "Health": 1
+    }
+  },
+  "David": {
+    "Name": "David",
+    "Player": "Peach",
+    "Stats": {
+      "Mental": 4,
+      "Social": 4,
+      "Physical": 7,
+      "Spirit": 3,
+      "Hearthfire": 6
+    }
+  }
+}

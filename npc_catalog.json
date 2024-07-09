@@ -1,0 +1,13 @@
+[
+    {
+        "name": "Roger",
+        "race": "Orc",
+        "role": "Fighter",
+        "stats": "18:14:20:12:11:9",
+        "armor_class": "17",
+        "attacks": "Dragon Bolt",
+        "hit_points": "42",
+        "abilities": "Orc Stuff",
+        "equipment": "None"
+    }
+]

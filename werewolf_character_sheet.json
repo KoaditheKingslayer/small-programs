@@ -1,0 +1,71 @@
+{
+  "player": "Your Name",
+  "character_name": "Luna Howls",
+  "breed": "Homid",
+  "tribe": "Silver Fangs",
+  "auspice": "Theurge",
+  "rank": "Cliath",
+  "attributes": {
+    "strength": 4,
+    "dexterity": 3,
+    "stamina": 5,
+    "charisma": 2,
+    "manipulation": 3,
+    "appearance": 4,
+    "perception": 3,
+    "intelligence": 2,
+    "wits": 4
+  },
+  "abilities": {
+    "talents": {
+      "alertness": 3,
+      "athletics": 2,
+      "brawl": 4,
+      "empathy": 2
+    },
+    "skills": {
+      "crafts": 1,
+      "drive": 2,
+      "firearms": 1,
+      "melee": 3
+    },
+    "knowledges": {
+      "enigmas": 2,
+      "occult": 3,
+      "rituals": 4
+    }
+  },
+  "backgrounds": {
+    "ally": 2,
+    "contacts": 3,
+    "resources": 2,
+    "totem": 4
+  },
+  "gifts": [
+    {
+      "name": "Heightened Senses",
+      "level": 1
+    },
+    {
+      "name": "Sense Wyrm",
+      "level": 2
+    },
+    {
+      "name": "Spirit Speech",
+      "level": 1
+    }
+  ],
+  "renown": {
+    "glory": 3,
+    "honor": 2,
+    "wisdom": 1
+  },
+  "rage": 3,
+  "gnosis": 5,
+  "willpower": 6,
+  "health": {
+    "current": 7,
+    "max": 7
+  },
+  "xp_spent": 173
+}
