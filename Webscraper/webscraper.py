@@ -20,6 +20,19 @@ import io
 ### Functions ###
 
 # Function to Scrape Images from a Website
+def scrape(url):
+    response = requests.get(url) # Uses the passed URL to obtain an HTTP request.
+    soup = BeautifulSoup(response.content, 'html.parser') # Parses the content of the response as HTML.
+    images = [] # List to contain the image source URLs.
+    for img in soup.find_all('img'): # Search for all img tags in the document.
+        src = img.get('src') # get the Source URL for the image
+        if src: # If a source is returned...
+            if not src.startswith('http'): # And If the source doesn't start with http
+                src = url + src 
+            images.append(src)
+    return images
+
+ 
 
 # Function to Create a Thumbnail from an Image URL
 
