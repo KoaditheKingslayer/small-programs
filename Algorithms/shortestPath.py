@@ -1,3 +1,6 @@
+# From FreeCodeCamp Scientific Computing with Python (beta)
+# Learn Algorithm Design by Building a Shortest Path Algorithm
+
 my_graph = {
     'A': [('B', 5), ('C', 3), ('E', 11)],
     'B': [('A', 5), ('C', 1), ('F', 2)],
