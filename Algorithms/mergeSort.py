@@ -37,8 +37,9 @@ def merge_sort(array):
 
 
 if __name__ == '__main__':
-    numbers = [4, 10, 6, 14, 2, 1, 8, 5]
-    print('Unsorted array: ')
-    print(numbers)
+    numbers = [4, 10, 6, 14, 2, 1, 8, 5, 29] # Input Numbers Here
+    print('\nUnsorted array: ')
+    print(numbers, '\n')
     merge_sort(numbers)
-    print('Sorted array: \n' + str(numbers))
+    print('Sorted array: \n' + str(numbers) + '\n')
+    print('Total Numbers: ' + str(len(numbers)) + '\n')
