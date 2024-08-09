@@ -14,68 +14,55 @@ class Category:
             title_line += '*'
         full_output = ''
         full_output += title_line + '\n' # Add Title Line to Output
+        count = 0
         for entry in self.ledger:
-            for key, value in entry.items():
-                if key == 'description':
-                    full_output += f'{key} {value:23}\n'
-                else:
-                    full_output += f'{key}: {value:.02f}\n'
+            desc = entry['description'][:23] # limit to 23 chars
+            count += entry['amount']
+            amount = f"{entry['amount']:>7.2f}" # max 7 chars, 2 dec places
+            full_output += f"{desc:<23}{amount}\n"  # 30 char wide format
+        # Output Category Total
+        total_line = f"Total: {count:.2f}"
+        full_output += f"{total_line}\n"  
         
         return full_output
-        # TODO
-        # display a list of items in the ledger.
-        # each line shows description and
-        # and the amount.
-        # First 23 chars of the description
-        # should be displayed, then the amount.
-        # The amount should be right-aligned,
-        # contain two decimal places, and 
-        # show a maximum of 7 characters.
-        # display a line displaying the 
-        # category total. 
+ 
     
     def deposit(self, amount, description=''):
+        # Add the deposit to the ledger of the current (self) category.
         self.ledger.append({'amount': amount, 'description': description})
-        # append an amount to the ledger list
-        # as {'amount': amount, 'description': description}
 
-    def withdraw(amount, description=''):
-        pass
-        # similar to deposit
-        # amount passed should be stored 
-        # in the ledger as a negative number
-        # IF there are not enough funds, 
-        # nothing should be added to the ledger.
-        # must return True if the withdrawal
-        # took place, and False otherwise.
 
-    def get_balance(category):
-        pass
-        # returns current balance of the 
-        # budget category based on deposits
-        # and withdrawals that have occured.
+    def withdraw(self, amount, description=''):
+        # Verify funds, then add the amount as a negative number.
+        if self.check_funds(amount):
+            self.ledger.append({'amount': -amount, 'description': description})
 
-    def transfer(amount, category):
-        pass
-        # add a withdrawal with the amount and
-        # description 'Transfer to [Destination Budget Category]'
-        # Then add a deposit to the target
-        # budget category with the same amount
-        # and the description
-        # 'Transfer from [Source Budget Category]'
-        # IF not enough funds, nothing should
-        # be added to either ledger.
-        # Return True if transfer took place.
-        # Return False if not.
+    def get_balance(self, category=None):
+        category = category if category else self
+        balance = 0
+        for entry in category.ledger:
+            balance += entry['amount'] 
+        return round(balance, 2)       
 
-    def check_funds(amount, category):
-        pass
-        # returns False if the amount is 
-        # greater than the balance of the 
-        # budget category
-        # returns True otherwise
-        # should be used by both withdraw
-        # and transfer 
+    def transfer(self, amount, category):
+        category = category if category else self
+        if category.check_funds(amount): # Transfer
+            self.withdraw(amount, description=f'Transfer to {category.category}')
+            category.deposit(amount, description=f'Transfer from {self.category}')
+            return True
+        else: # No Transfer
+            print("Transfer unsuccessful")
+            return False
+
+    def check_funds(self, amount, category=None):
+        # Use the specified category or default to self
+        category = category if category else self
+    
+        balance = 0
+        for entry in category.ledger:
+            balance += entry['amount']
+    
+        return amount <= balance 
 
 def create_spend_chart(categories):
     pass
@@ -101,15 +88,16 @@ def create_spend_chart(categories):
     # four categories.
 
 food = Category('Food')
-
-food.deposit(12.22, 'Date with the Harem')
-food.deposit(13.50, 'House Grub')
-
+food.deposit(12.22, 'Deposit')
+food.withdraw(10, 'Groceries')
+food.deposit(13.50, 'Deposit')
+food.deposit(123.10, 'Charge-Back')
+food.withdraw(100.00, 'Withdraw')
 ent = Category('Entertainment')
-
 ent.deposit(15.00, 'Netflix')
+food.transfer(10, ent)
 
 print(food)
 print(ent)
-
+print(food.get_balance())
 
