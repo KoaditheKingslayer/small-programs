@@ -4,10 +4,25 @@ class Category:
         self.ledger = []
 
     def __str__(self):
-        pass
-        # display a title line of 30 chars
-        # where the name of the category is
-        # centered in a line of *'s.
+        # Calculate needed asterisks on each side
+        asterisk_count = int((30 - len(self.category)) / 2)
+        asterisks = '*' * asterisk_count
+        # Create the Title Line, with category surrounded by asterisks.
+        title_line = asterisks + self.category + asterisks
+        # If there's one missing from rounding, add a last asterisk.
+        if len(title_line) < 30:
+            title_line += '*'
+        full_output = ''
+        full_output += title_line + '\n' # Add Title Line to Output
+        for entry in self.ledger:
+            for key, value in entry.items():
+                if key == 'description':
+                    full_output += f'{key} {value:23}\n'
+                else:
+                    full_output += f'{key}: {value:.02f}\n'
+        
+        return full_output
+        # TODO
         # display a list of items in the ledger.
         # each line shows description and
         # and the amount.
@@ -19,8 +34,8 @@ class Category:
         # display a line displaying the 
         # category total. 
     
-    def deposit(amount, descripton=''):
-        pass
+    def deposit(self, amount, description=''):
+        self.ledger.append({'amount': amount, 'description': description})
         # append an amount to the ledger list
         # as {'amount': amount, 'description': description}
 
@@ -84,3 +99,17 @@ def create_spend_chart(categories):
     # Says 'Percentage spent by category.'
     # This function will be tested with up to 
     # four categories.
+
+food = Category('Food')
+
+food.deposit(12.22, 'Date with the Harem')
+food.deposit(13.50, 'House Grub')
+
+ent = Category('Entertainment')
+
+ent.deposit(15.00, 'Netflix')
+
+print(food)
+print(ent)
+
+
