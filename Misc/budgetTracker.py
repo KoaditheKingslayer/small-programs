@@ -2,30 +2,28 @@ class Category:
     def __init__(self, category):
         self.category = category
         self.ledger = []
-
+ 
     def __str__(self):
-        # Calculate needed asterisks on each side
+        # Title line: centered category name surrounded by asterisks, total length 30 characters
         asterisk_count = int((30 - len(self.category)) / 2)
         asterisks = '*' * asterisk_count
-        # Create the Title Line, with category surrounded by asterisks.
         title_line = asterisks + self.category + asterisks
-        # If there's one missing from rounding, add a last asterisk.
         if len(title_line) < 30:
             title_line += '*'
-        full_output = ''
-        full_output += title_line + '\n' # Add Title Line to Output
-        count = 0
-        for entry in self.ledger:
-            desc = entry['description'][:23] # limit to 23 chars
-            count += entry['amount']
-            amount = f"{entry['amount']:>7.2f}" # max 7 chars, 2 dec places
-            full_output += f"{desc:<23}{amount}\n"  # 30 char wide format
-        # Output Category Total
-        total_line = f"Total: {count:.2f}"
-        full_output += f"{total_line}\n"  
         
-        return full_output
- 
+        # Ledger entries: description (23 chars), amount (7 chars, right-aligned)
+        full_output = title_line + '\n'
+        for entry in self.ledger:
+            desc = entry['description'][:23].ljust(23)
+            amount = f"{entry['amount']:>7.2f}"
+            full_output += f"{desc}{amount}\n"
+        
+        # Total line: right after ledger entries
+        total = self.get_balance()
+        total_line = f"Total: {total:.2f}"
+        full_output += total_line
+        
+        return full_output 
     
     def deposit(self, amount, description=''):
         # Add the deposit to the ledger of the current (self) category.
@@ -36,6 +34,9 @@ class Category:
         # Verify funds, then add the amount as a negative number.
         if self.check_funds(amount):
             self.ledger.append({'amount': -amount, 'description': description})
+            return True
+        else:
+            return False
 
     def get_balance(self, category=None):
         category = category if category else self
@@ -46,7 +47,7 @@ class Category:
 
     def transfer(self, amount, category):
         category = category if category else self
-        if category.check_funds(amount): # Transfer
+        if self.check_funds(amount): # Transfer
             self.withdraw(amount, description=f'Transfer to {category.category}')
             category.deposit(amount, description=f'Transfer from {self.category}')
             return True
@@ -61,13 +62,44 @@ class Category:
         balance = 0
         for entry in category.ledger:
             balance += entry['amount']
-    
-        return amount <= balance 
+        if amount <= balance:
+            return True 
+        else: 
+            return False
 
 def create_spend_chart(categories):
-    pass
-    # pass a list of categories
-    # return a string that is a bar chart
+    title = 'Percentage spent by category'
+    bar_chart = title + '\n'
+    labels = [
+        '100|', '90|', '80|',
+        '70|', '60|', '50|',
+        '40|', '30|', '20|',
+        '10|', '0|']
+
+    category_amount = {}
+    chart_total = 0 # Total to draw Percentage Comparison
+    for category in categories:
+        running_total = 0
+        for entry in category.ledger:
+            if entry['amount'] < 0:
+                running_total += entry['amount']
+                #print(category.category, entry['amount'])
+        category_amount[category.category] = running_total
+        #print(f"{category.category}: {running_total}")
+        chart_total += running_total
+
+    # Percentage Calculation, Round Down (convert to Int)
+    percentage = [] # Each item is a percentage
+    for category in categories:
+        percentage.append((int((category_amount[category.category] / chart_total) * 100)))
+    # Each individual percentage
+    for i in range(len(percentage)):
+        print((percentage[i] // 10) * 10)
+    #print(f'Chart Total: {chart_total}')
+
+
+    return bar_chart  # return string
+
     # chart should show the percentage spent
     # in each category passed in the function.
     # The percentage spent should be calculated
@@ -88,16 +120,21 @@ def create_spend_chart(categories):
     # four categories.
 
 food = Category('Food')
+ent = Category('Entertainment')
+medical = Category('Medical')
+ledgers = [food, ent, medical]
 food.deposit(12.22, 'Deposit')
 food.withdraw(10, 'Groceries')
 food.deposit(13.50, 'Deposit')
 food.deposit(123.10, 'Charge-Back')
 food.withdraw(100.00, 'Withdraw')
-ent = Category('Entertainment')
 ent.deposit(15.00, 'Netflix')
 food.transfer(10, ent)
+ent.transfer(20, food)
+medical.deposit(1000, 'FSA Deposit')
+medical.deposit(120, 'Medicaid')
 
-print(food)
-print(ent)
-print(food.get_balance())
+# for ledger in ledgers:
+#    print(ledger)
 
+print(create_spend_chart(ledgers))
