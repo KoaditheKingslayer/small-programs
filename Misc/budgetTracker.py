@@ -1,11 +1,11 @@
-class Category:
+class Category: 
     def __init__(self, category):
         self.category = category
         self.ledger = []
- 
+
     def __str__(self):
         # Title line: centered category name surrounded by asterisks, total length 30 characters
-        asterisk_count = int((30 - len(self.category)) / 2)
+        asterisk_count = int((30 - len(self.category)) / 2) 
         asterisks = '*' * asterisk_count
         title_line = asterisks + self.category + asterisks
         if len(title_line) < 30:
@@ -71,70 +71,76 @@ def create_spend_chart(categories):
     title = 'Percentage spent by category'
     bar_chart = title + '\n'
     labels = [
-        '100|', '90|', '80|',
-        '70|', '60|', '50|',
-        '40|', '30|', '20|',
-        '10|', '0|']
+        '100', ' 90', ' 80',
+        ' 70', ' 60', ' 50',
+        ' 40', ' 30', ' 20',
+        ' 10', '  0']
 
     category_amount = {}
-    chart_total = 0 # Total to draw Percentage Comparison
+    chart_total = 0
     for category in categories:
         running_total = 0
         for entry in category.ledger:
             if entry['amount'] < 0:
-                running_total += entry['amount']
-                #print(category.category, entry['amount'])
+                running_total += -entry['amount']
         category_amount[category.category] = running_total
-        #print(f"{category.category}: {running_total}")
         chart_total += running_total
 
-    # Percentage Calculation, Round Down (convert to Int)
-    percentage = [] # Each item is a percentage
-    for category in categories:
-        percentage.append((int((category_amount[category.category] / chart_total) * 100)))
-    # Each individual percentage
-    for i in range(len(percentage)):
-        print((percentage[i] // 10) * 10)
-    #print(f'Chart Total: {chart_total}')
+    percentage = [int((category_amount[cat.category] / chart_total) * 100) for cat in categories]
+    f_percentages = [(p // 10) * 10 for p in percentage]
 
+    # Initialize the bar chart rows
+    label_string = ['' for _ in range(len(labels))]
+    dashes = '    ' + '-' * (len(categories) * 3 + 1)
 
-    return bar_chart  # return string
+    for i, label in enumerate(labels):
+        label_string[i] = f"{label:>3}|"
+        for p in f_percentages:
+            if p >= int(label):
+                label_string[i] += ' o '
+            else:
+                label_string[i] += '   '
+        label_string[i] += ' \n'  # Adding space and newline
 
-    # chart should show the percentage spent
-    # in each category passed in the function.
-    # The percentage spent should be calculated
-    # only with withdrawals, not deposits.
-    # Down the left side of the chart should be
-    # labels 0 - 100.
-    # the 'bars' in the bar chart should be 
-    # made out of the 'o' character. The 
-    # height of each bar should be rounded down
-    # to the nearest 10. 
-    # The horizontal line below the bars
-    # should go two spaces past the final bar. 
-    # Each category name should be written
-    # vertically below the bar.
-    # There should be a title at the top that 
-    # Says 'Percentage spent by category.'
-    # This function will be tested with up to 
-    # four categories.
+    bar_chart += ''.join(label_string) + dashes + '\n'
 
+    # Prepare to add category names below the chart
+    max_name_length = max(len(category.category) for category in categories)
+    category_names = [category.category.ljust(max_name_length) for category in categories]
+
+    # Add Category Names
+    for i in range(max_name_length):
+        name_line = '    '
+        for name in category_names:
+            if i < len(name):
+                name_line += f" {name[i]} "
+            else:
+                name_line += '   '
+        # Ensure there is a newline character and avoid extra spaces
+        bar_chart += name_line.rstrip() + '\n'
+
+    return bar_chart
+
+# Test Output 
 food = Category('Food')
 ent = Category('Entertainment')
+other = Category('Other')
+other.deposit(1000, 'Deposit')
 medical = Category('Medical')
-ledgers = [food, ent, medical]
+other.transfer(80, ent)
 food.deposit(12.22, 'Deposit')
 food.withdraw(10, 'Groceries')
 food.deposit(13.50, 'Deposit')
 food.deposit(123.10, 'Charge-Back')
 food.withdraw(100.00, 'Withdraw')
-ent.deposit(15.00, 'Netflix')
+ent.deposit(15.00, 'Netflix Refund')
+ent.withdraw(25, 'Movie Night')
 food.transfer(10, ent)
 ent.transfer(20, food)
 medical.deposit(1000, 'FSA Deposit')
 medical.deposit(120, 'Medicaid')
+ledgers = [food, ent, medical, other]
 
-# for ledger in ledgers:
+#for ledger in ledgers:
 #    print(ledger)
-
 print(create_spend_chart(ledgers))
