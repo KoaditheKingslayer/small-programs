@@ -125,8 +125,10 @@ def create_spend_chart(categories):
 food = Category('Food')
 ent = Category('Entertainment')
 other = Category('Other')
-other.deposit(1000, 'Deposit')
 medical = Category('Medical')
+toy = Category('Toys')
+toy.deposit(40, 'Deposit for Fun')
+other.deposit(1000, 'Deposit')
 other.transfer(80, ent)
 food.deposit(12.22, 'Deposit')
 food.withdraw(10, 'Groceries')
@@ -139,8 +141,8 @@ food.transfer(10, ent)
 ent.transfer(20, food)
 medical.deposit(1000, 'FSA Deposit')
 medical.deposit(120, 'Medicaid')
-ledgers = [food, ent, medical, other]
+ledgers = [food, ent, medical, other, toy]
 
-#for ledger in ledgers:
-#    print(ledger)
+for ledger in ledgers:
+    print(ledger)
 print(create_spend_chart(ledgers))
